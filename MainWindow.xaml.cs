@@ -17,6 +17,15 @@ namespace MouseToJoystick2
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
+            if ((string)this.start_btn.Content == "Run")
+            {
+                this.start_btn.Content = "Stop";
+            }
+            else if((string)this.start_btn.Content == "Stop")
+            {
+                this.start_btn.Content = "Run";
+            }
+            
             var model = (MainWindowModel)this.DataContext;
 
             if (model.ShouldRun == true)
