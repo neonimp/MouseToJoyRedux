@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 
 namespace MouseToJoystick2
@@ -17,6 +18,7 @@ namespace MouseToJoystick2
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
+            // Toggle the button text
             if ((string)this.start_btn.Content == "Run")
             {
                 this.start_btn.Content = "Stop";
@@ -59,6 +61,16 @@ namespace MouseToJoystick2
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             new OSSInfoWindow().Show();
+        }
+
+        private void XSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this.XSensePresc.Text = XSense.Value.ToString("#.##", CultureInfo.InvariantCulture);
+        }
+
+        private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this.YSensePresc.Text = YSense.Value.ToString("#.##", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace MouseToJoystick2
         readonly bool autoSize;
         readonly int manualWidth;
         readonly int manualHeight;
+        readonly bool leftJoy;
 
         // MouseKeyHook stuff
         private IKeyboardMouseEvents mouseEventHooker = null;
@@ -32,7 +33,7 @@ namespace MouseToJoystick2
         private const uint VJOY_BTN_2 = 2;
         private const uint VJOY_BTN_3 = 3;
 
-        public MouseToJoystickHandler(uint vjoyDevId, bool invertX, bool invertY, bool autoCenter, bool autoSize, int manualWidth, int manualHeight)
+        public MouseToJoystickHandler(uint vjoyDevId, bool invertX, bool invertY, bool autoCenter, bool autoSize, int manualWidth, int manualHeight, bool leftJoy = true)
         {
             this.id = vjoyDevId;
             this.invertX = invertX ? -1 : 1;
@@ -41,6 +42,7 @@ namespace MouseToJoystick2
             this.autoSize = autoSize;
             this.manualWidth = manualWidth;
             this.manualHeight = manualHeight;
+            this.leftJoy = leftJoy;
 
             joystick = new vJoy();
 
