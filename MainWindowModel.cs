@@ -11,6 +11,9 @@ namespace MouseToJoystick2
         public bool InvertY { get; set; } = false;
         public bool LeftJoy { get; set; } = false;
         public bool RightJoy { get; set; } = false;
+        public double SenseLeft { get; set; } = 1;
+        public double SenseRight { get; set; } = 1;
+        public bool Scroll { get; set; } = false;
         public bool? ShouldRun { get; set; } = false;
         public bool AutoScreenSize { get; set; } = true;
         public string ScreenWidth { get; set; } = "640";

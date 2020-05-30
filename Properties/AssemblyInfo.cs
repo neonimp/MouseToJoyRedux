@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("cmdforge.com")]
 [assembly: AssemblyProduct("MouseToJoyRedux")]
-[assembly: AssemblyCopyright("Copyright © 2020 CMDFORGE")]
+[assembly: AssemblyCopyright("Copyright (c) 2020 cmdforge.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

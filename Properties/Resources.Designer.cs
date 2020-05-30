@@ -81,6 +81,31 @@ namespace MouseToJoystick2.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A plain text version of this file may be obtained at
+        ///https://cdn.cmdforge.net/pub/docs/jtmr-legal-complete.txt or the site
+        ///you downloaded this software from. See the end of the file for a list of
+        ///links to the mentioned projects
+        ///
+        ///
+        ///
+        ///LICENSE
+        ///
+        ///
+        ///    MIT License
+        ///
+        ///    Copyright (c) 2020 raptorswing
+        ///    Copyright (c) 2020 Matheus Xavier &lt;mxavier@mail.cmdforge.com&gt;, Matheus Ferreira &lt;ttuz.code@gmail.com&gt;
+        ///
+        ///    Permission is hereby granted, free of charge, to any person obtaining a copy
+        ///    of this sof [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Licenses {
+            get {
+                return ResourceManager.GetString("Licenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon md_32 {

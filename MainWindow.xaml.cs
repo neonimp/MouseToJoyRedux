@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using MahApps.Metro.Controls;
+using ControlzEx.Theming;
 
 namespace MouseToJoystick2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private MouseToJoystickHandler handler = null;
 
         public MainWindow()
         {
             InitializeComponent();
+            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAccent;
+            ThemeManager.Current.SyncTheme();
         }
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
@@ -71,6 +75,11 @@ namespace MouseToJoystick2
         private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this.YSensePresc.Text = YSense.Value.ToString("#.##", CultureInfo.InvariantCulture);
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
         }
     }
 }

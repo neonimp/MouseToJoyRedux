@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Net;
+using System.Resources;
+using System.Reflection;
 
 namespace MouseToJoystick2
 {
@@ -22,6 +25,16 @@ namespace MouseToJoystick2
         public OSSInfoWindow()
         {
             InitializeComponent();
+            try
+            {
+                var response = new WebClient().DownloadString("https://cdn.cmdforge.net/pub/docs/jtmr-legal-complete.txt");
+                License.Text = response;
+            }
+            catch (WebException)
+            {
+                var response = MouseToJoystick2.Properties.Resources.Licenses;
+                License.Text = response;
+            }
         }
     }
 }
