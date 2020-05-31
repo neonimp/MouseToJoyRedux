@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MouseToJoystick2"
         mc:Ignorable="d"
-        Title="Open Source Info" SizeToContent="Width" Width="830" Height="630" Icon="Resources/license.ico">
+        Title="Open Source Info" SizeToContent="Width" Width="830" Height="630" Icon="Resources/license.ico" ResizeMode="NoResize">
     <TextBox x:Name="License" TextWrapping="Wrap" xml:space="preserve" VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" IsReadOnly="True" Width="800">
 
     </TextBox>

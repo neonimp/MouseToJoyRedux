@@ -1,8 +1,11 @@
-﻿using System;
+﻿using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Globalization;
 using System.Windows;
-using MahApps.Metro.Controls;
-using ControlzEx.Theming;
+using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace MouseToJoystick2
 {
@@ -16,22 +19,22 @@ namespace MouseToJoystick2
         public MainWindow()
         {
             InitializeComponent();
-            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAccent;
+            var model = (MainWindowModel)this.DataContext;
+            ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
             ThemeManager.Current.SyncTheme();
+            DispatcherTimer dt = new DispatcherTimer();
+            dt.Tick += Keep_themeSync;
+            dt.Interval = new TimeSpan(0, 0, 1);
+            dt.Start();
+            var bounds = Screen.PrimaryScreen.Bounds;
+            model.ScreenWidth = bounds.Width.ToString();
+            model.ScreenHeight = bounds.Height.ToString();
         }
+
+        private void Keep_themeSync(object sender, EventArgs e) => ThemeManager.Current.SyncTheme();
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            // Toggle the button text
-            if ((string)this.start_btn.Content == "Run")
-            {
-                this.start_btn.Content = "Stop";
-            }
-            else if((string)this.start_btn.Content == "Stop")
-            {
-                this.start_btn.Content = "Run";
-            }
-            
             var model = (MainWindowModel)this.DataContext;
 
             if (model.ShouldRun == true)
@@ -46,9 +49,11 @@ namespace MouseToJoystick2
                 }
                 catch (Exception err)
                 {
-                    Console.WriteLine("Whoops!");
-                    System.Windows.Forms.MessageBox.Show(err.Message);
+                    this.ShowModalMessageExternal("Error", err.Message);
+                    // System.Windows.Forms.MessageBox.Show(err.Message);
                     model.ShouldRun = false;
+                    model.SettingsEnabled = true;
+                    this.start_btn.IsChecked = false;
                 }
             }
             else
@@ -60,6 +65,8 @@ namespace MouseToJoystick2
                 }
                 model.SettingsEnabled = true;
             }
+
+            this.start_btn.Content = (bool)this.start_btn.IsChecked ? "Stop" : "Start";
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
