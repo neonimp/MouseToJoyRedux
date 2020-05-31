@@ -8,13 +8,10 @@ using System.Windows.Threading;
 
 namespace MouseToJoystick2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : MetroWindow
     {
         private MouseToJoystickHandler handler = null;
-        private uint[] availableJoys;
+        private readonly uint[] availableJoys;
 
         public MainWindow()
         {
@@ -44,8 +41,6 @@ namespace MouseToJoystick2
         private void Keep_themeSync(object sender, EventArgs e) => ThemeManager.Current.SyncTheme();
         private void PrintMessage(string message) => LogBox.Text += message + "\n";
 
-        
-
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
             var model = (MainWindowModel)this.DataContext;
@@ -57,11 +52,19 @@ namespace MouseToJoystick2
                 int manualHeight = Convert.ToInt32(model.ScreenHeight);
                 try
                 {
-                    handler = new MouseToJoystickHandler(deviceId, model.InvertX, model.InvertY, model.AutoCenter, model.AutoScreenSize, manualWidth, manualHeight);
-                    PrintMessage($"Aquiring device with properties:");
-                    PrintMessage($"id: {deviceId};");
-                    PrintMessage($"inv(x,y): {model.InvertX},{model.InvertY};");
-                    PrintMessage($"auto-center: {model.AutoCenter};");
+                    M2JConfig cfg = new M2JConfig
+                    {
+                        VjoyDevId = deviceId,
+                        InvertX = model.InvertX,
+                        InvertY = model.InvertY,
+                        AutoCenter = model.AutoCenter,
+                        AutoSize = model.AutoScreenSize,
+                        ManualWidth = manualWidth,
+                        ManualHeight = manualHeight,
+                        LeftJoy = model.LeftJoy
+                    };
+                    handler = new MouseToJoystickHandler(cfg);
+                    PrintMessage($"Aquiring device with properties: {cfg}");
                     model.SettingsEnabled = false;
                 }
                 catch (Exception err)
@@ -86,11 +89,7 @@ namespace MouseToJoystick2
             this.start_btn.Content = (bool)this.start_btn.IsChecked ? "Stop" : "Start";
         }
 
-        private void Hyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            new OSSInfoWindow().Show();
-        }
-
+        private void Hyperlink_Click(object sender, RoutedEventArgs e) => new OSSInfoWindow().Show();
         private void XSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => XSensePresc.Value = XSense.Value;
         private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => YSensePresc.Value = YSense.Value;
         private void XSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => XSense.Value = XSensePresc.Value == null ? 0 : (double)XSensePresc.Value;

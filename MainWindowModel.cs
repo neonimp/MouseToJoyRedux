@@ -10,7 +10,7 @@ namespace MouseToJoystick2
         public int DeviceId { get; set; } = 1;
         public bool InvertX { get; set; } = false;
         public bool InvertY { get; set; } = false;
-        public bool LeftJoy { get; set; } = false;
+        public bool LeftJoy { get; set; } = true;
         public bool RightJoy { get; set; } = false;
         public int SenseLeft { get; set; } = 1;
         public int SenseRight { get; set; } = 1;

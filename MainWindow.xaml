@@ -16,31 +16,35 @@
     <StackPanel Margin="10">
         <TabControl>
             <TabItem Header="General">
-                <StackPanel Margin="5">
+                <StackPanel Margin="5" IsEnabled="{Binding SettingsEnabled}">
                     <Grid VerticalAlignment="Center" Margin="0,0,0,10">
                         <Label Content="vJoy Device:" HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" FontSize="12" />
                         <ComboBox x:Name="vJoyDeviceInput" 
                                   HorizontalAlignment="Left"
-                                  IsEnabled="{Binding SettingsEnabled}"
                                   VerticalAlignment="Center"
                                   Width="80"
                                   Height="10"
                                   Margin="74,4,0,0"/>
                     </Grid>
                     <Grid Margin="2">
-                        <RadioButton Content="Left" x:Name="leftJoy" IsChecked="{Binding LeftJoy}" HorizontalAlignment="Left" IsEnabled="{Binding SettingsEnabled}" />
-                        <RadioButton Content="Right" x:Name="rightJoy" IsChecked="{Binding RightJoy}" HorizontalAlignment="Center" IsEnabled="{Binding SettingsEnabled}" />
+                        <RadioButton Content="Left" x:Name="leftJoy" IsChecked="{Binding LeftJoy}" HorizontalAlignment="Left" />
+                        <RadioButton Content="Right" x:Name="rightJoy" IsChecked="{Binding RightJoy}" HorizontalAlignment="Center" />
                     </Grid>
                     <StackPanel>
-                        <mah:ToggleSwitch Margin="2" x:Name="useScrollWheel" Content="Scroll" IsOn="{Binding UseScroll}" IsEnabled="{Binding SettingsEnabled}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="invertXCheckbox" Content="Invert X" IsOn="{Binding InvertX}" IsEnabled="{Binding SettingsEnabled}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="invertYCheckbox" Content="Invert Y" IsOn="{Binding InvertY}" IsEnabled="{Binding SettingsEnabled}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="autoCenter" Content="Auto-Center" IsOn="{Binding AutoCenter}" IsEnabled="{Binding SettingsEnabled}" />
+                        <mah:ToggleSwitch Margin="2" x:Name="useScrollWheel" Content="Scroll" IsOn="{Binding UseScroll}" />
+                        <mah:ToggleSwitch Margin="2" x:Name="invertXCheckbox" Content="Invert X" IsOn="{Binding InvertX}" />
+                        <mah:ToggleSwitch Margin="2" x:Name="invertYCheckbox" Content="Invert Y" IsOn="{Binding InvertY}" />
+                        <mah:ToggleSwitch Margin="2" x:Name="autoCenter" Content="Auto-Center" IsOn="{Binding AutoCenter}" />
                     </StackPanel>
                     <WrapPanel>
                         <Label Content="Screen Size: " />
-                        <RadioButton Content="Automatic" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding AutoScreenSize}" GroupName="ScreenSize" IsEnabled="{Binding SettingsEnabled}" />
-                        <RadioButton Content="Custom" VerticalContentAlignment="Center" GroupName="ScreenSize" IsChecked="{Binding ManualScreenSize}" IsEnabled="{Binding SettingsEnabled}" />
+                        <RadioButton Content="Automatic"
+                                     HorizontalContentAlignment="Stretch"
+                                     VerticalContentAlignment="Center"
+                                     Margin="0,0,5,0"
+                                     IsChecked="{Binding AutoScreenSize}"
+                                     GroupName="ScreenSize" />
+                        <RadioButton Content="Custom" VerticalContentAlignment="Center" GroupName="ScreenSize" IsChecked="{Binding ManualScreenSize}" />
                         <Label Content="W:" />
                         <TextBox Width="32" Height="20" IsEnabled="{Binding ManualScreenSize}" Text="{Binding ScreenWidth}" />
                         <Label Content="H:" />
@@ -49,7 +53,7 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Sensitivity">
-                <StackPanel Margin="5">
+                <StackPanel Margin="5" IsEnabled="{Binding SettingsEnabled}">
                     <WrapPanel>
                         <GroupBox Header="X sensitivity">
                             <WrapPanel x:Name="xSenseGrp" Margin="5">
@@ -61,7 +65,7 @@
                                                    Minimum="0" 
                                                    NumericInputMode="Numbers" 
                                                    Speedup="True"
-                                                   IsEnabled="{Binding SettingsEnabled}" ValueChanged="XSensePresc_ValueChanged" />
+                                                   ValueChanged="XSensePresc_ValueChanged" />
                             </WrapPanel>
                         </GroupBox>
                         <GroupBox Header="Y sensitivity">
@@ -73,7 +77,7 @@
                                                    Maximum="100" Minimum="0" 
                                                    NumericInputMode="Numbers" 
                                                    Speedup="True"
-                                                   IsEnabled="{Binding SettingsEnabled}" ValueChanged="YSensePresc_ValueChanged" />
+                                                   ValueChanged="YSensePresc_ValueChanged" />
                             </WrapPanel>
                         </GroupBox>
                     </WrapPanel>
@@ -87,7 +91,7 @@
                          VerticalScrollBarVisibility="Visible"
                          ScrollViewer.CanContentScroll="True"
                          IsReadOnly="True"
-                         Width="400" />
+                         Width="400" Height="300" />
                 </StackPanel>
             </TabItem>
         </TabControl>

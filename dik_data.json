@@ -1,10 +1,4 @@
 {
-  "metadata": {
-    "authors": [ "Matheus 'CardinalBytes' Xavier <mxavier@bpmx.io>", "Matheus 'ttuz' Ferreira <ttuz.code@gmail.com>" ],
-    "version": "1.0",
-    "license": "BSD-3-Clause",
-    "notes": "Direct Input Keyboard codes"
-  },
   "DIK_ESCAPE": 1,
   "DIK_1": 2,
   "DIK_2": 3,

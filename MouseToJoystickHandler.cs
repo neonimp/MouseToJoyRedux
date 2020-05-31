@@ -6,6 +6,46 @@ using vJoyInterfaceWrap;
 
 namespace MouseToJoystick2
 {
+    public struct M2JConfig
+    {
+        public uint VjoyDevId { get; set; }
+        public bool InvertX { get; set; }
+        public bool InvertY { get; set; }
+        public bool AutoCenter { get; set; }
+        public bool AutoSize { get; set; }
+        public int ManualWidth { get; set; }
+        public int ManualHeight { get; set; }
+        public double SenseX { get; set; }
+        public double SenseY { get; set; }
+        public bool LeftJoy { get; set; }
+        
+        public M2JConfig(uint vjoyDevId, bool invertX, bool invertY, bool autoCenter, bool autoSize, int manualWidth, int manualHeight, double senseX, double senseY, bool leftJoy = true)
+        {
+            VjoyDevId = vjoyDevId;
+            InvertX = invertX;
+            InvertY = invertY;
+            AutoCenter = autoCenter;
+            AutoSize = autoSize;
+            ManualWidth = manualWidth;
+            ManualHeight = manualHeight;
+            SenseX = senseX;
+            SenseY = senseY;
+            LeftJoy = leftJoy;
+        }
+
+        public override string ToString()
+        {
+            return $"VjoyDevId: {VjoyDevId}\n" +
+                $"InvertX: {InvertX}\n" +
+                $"InvertY: {InvertY}\n" +
+                $"AutoCenter: {AutoCenter}\n" +
+                $"AutoSize: {AutoSize}\n" +
+                $"ManualWidth: {ManualWidth}\n" +
+                $"ManualHeight: {ManualHeight}\n" +
+                $"sense(X,Y): {SenseX},{SenseY}\n" +
+                $"LeftJoy: {LeftJoy}";
+        }
+    }
     class MouseToJoystickHandler : IDisposable
     {
         readonly int invertX;
@@ -34,16 +74,16 @@ namespace MouseToJoystick2
         private const uint VJOY_BTN_2 = 2;
         private const uint VJOY_BTN_3 = 3;
 
-        public MouseToJoystickHandler(uint vjoyDevId, bool invertX, bool invertY, bool autoCenter, bool autoSize, int manualWidth, int manualHeight, bool leftJoy = true)
+        public MouseToJoystickHandler(M2JConfig cfgObj)
         {
-            this.id = vjoyDevId;
-            this.invertX = invertX ? -1 : 1;
-            this.invertY = invertY ? -1 : 1;
-            this.autoCenter = autoCenter;
-            this.autoSize = autoSize;
-            this.manualWidth = manualWidth;
-            this.manualHeight = manualHeight;
-            this.leftJoy = leftJoy;
+            this.id = cfgObj.VjoyDevId;
+            this.invertX = cfgObj.InvertX ? -1 : 1;
+            this.invertY = cfgObj.InvertY ? -1 : 1;
+            this.autoCenter = cfgObj.AutoCenter;
+            this.autoSize = cfgObj.AutoSize;
+            this.manualWidth = cfgObj.ManualWidth;
+            this.manualHeight = cfgObj.ManualHeight;
+            this.leftJoy = cfgObj.LeftJoy;
 
             joystick = new vJoy();
 
@@ -207,10 +247,16 @@ namespace MouseToJoystick2
                 yOut = Clamp<int>(Convert.ToInt32(AXIS_MIN), (int)(AXIS_MID + invertY * deltaY * outputPerDeltaY), Convert.ToInt32(AXIS_MAX));
             }
 
-            //Console.WriteLine(String.Format("{0}, {1} -> {2}, {3}", lastX, lastY, xOut, yOut));
-
-            joystick.SetAxis(xOut, this.id, HID_USAGES.HID_USAGE_X);
-            joystick.SetAxis(yOut, this.id, HID_USAGES.HID_USAGE_Y);
+            if (leftJoy)
+            {
+                joystick.SetAxis(xOut, this.id, HID_USAGES.HID_USAGE_X);
+                joystick.SetAxis(yOut, this.id, HID_USAGES.HID_USAGE_Y);
+            }
+            else
+            {
+                joystick.SetAxis(xOut, this.id, HID_USAGES.HID_USAGE_RX);
+                joystick.SetAxis(yOut, this.id, HID_USAGES.HID_USAGE_RY);
+            }
         }
 
         private static T Clamp<T>(T min, T val, T max) where T : IComparable<T>
