@@ -1,5 +1,6 @@
 ﻿using Gma.System.MouseKeyHook;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using vJoyInterfaceWrap;
 
@@ -97,6 +98,25 @@ namespace MouseToJoystick2
             mouseEventHooker.MouseMove += HandleMouseMove;
             mouseEventHooker.MouseDown += HandleMouseDown;
             mouseEventHooker.MouseUp += HandleMouseUp;
+        }
+
+        public static uint[] GetActiveJoys()
+        {
+            VjdStat status;
+            List<uint> availableDevs = new List<uint>();
+            var joystick = new vJoy();
+
+
+            for (uint id = 0; id < 16; id++)
+            {
+                status = joystick.GetVJDStatus(id);
+                if (status == VjdStat.VJD_STAT_FREE)
+                {
+                    availableDevs.Add(id);
+                }
+            }
+
+            return availableDevs.ToArray();
         }
 
         private void HandleMouseDown(object sender, MouseEventArgs e)

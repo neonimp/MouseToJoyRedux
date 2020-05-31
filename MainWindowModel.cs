@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace MouseToJoystick2
 {
     public class MainWindowModel : INotifyPropertyChanged
@@ -11,8 +12,8 @@ namespace MouseToJoystick2
         public bool InvertY { get; set; } = false;
         public bool LeftJoy { get; set; } = false;
         public bool RightJoy { get; set; } = false;
-        public double SenseLeft { get; set; } = 1;
-        public double SenseRight { get; set; } = 1;
+        public int SenseLeft { get; set; } = 1;
+        public int SenseRight { get; set; } = 1;
         public bool UseScroll { get; set; } = false;
         public bool? ShouldRun { get; set; } = false;
         public bool AutoScreenSize { get; set; } = true;

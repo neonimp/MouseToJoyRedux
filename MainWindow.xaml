@@ -6,7 +6,7 @@
                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  mc:Ignorable="d"
                  DataContext="{StaticResource MainWindowModel}"
-                 Title="MouseToJoyRedux" 
+                 Title="M2J Redux" 
                  ResizeMode="CanMinimize"
                  SizeToContent="WidthAndHeight"
                  Width="400" Height="400" 
@@ -19,14 +19,13 @@
                 <StackPanel Margin="5">
                     <Grid VerticalAlignment="Center" Margin="0,0,0,10">
                         <Label Content="vJoy Device:" HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" FontSize="12" />
-                        <mah:NumericUpDown x:Name="vJoyDeviceInput" HorizontalAlignment="Left" 
-                                 IsEnabled="{Binding SettingsEnabled}"
-                                 Value="{Binding DeviceId}" 
-                                 VerticalAlignment="Center" 
-                                 Width="20"
-                                 Height="10"
-                                 Margin="74,4,0,0"
-                                 TextAlignment="Center" />
+                        <ComboBox x:Name="vJoyDeviceInput" 
+                                  HorizontalAlignment="Left"
+                                  IsEnabled="{Binding SettingsEnabled}"
+                                  VerticalAlignment="Center"
+                                  Width="80"
+                                  Height="10"
+                                  Margin="74,4,0,0"/>
                     </Grid>
                     <Grid Margin="2">
                         <RadioButton Content="Left" x:Name="leftJoy" IsChecked="{Binding LeftJoy}" HorizontalAlignment="Left" IsEnabled="{Binding SettingsEnabled}" />
@@ -54,23 +53,46 @@
                     <WrapPanel>
                         <GroupBox Header="X sensitivity">
                             <WrapPanel x:Name="xSenseGrp" Margin="5">
-                                <Slider Maximum="100" Width="100" x:Name="XSense" ValueChanged="XSense_ValueChanged" />
-                                <TextBox Margin="5,0,0,0" Width="50" x:Name="XSensePresc" />
+                                <Slider Maximum="100" Width="100" x:Name="XSense" ValueChanged="XSense_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SettingsEnabled}" />
+                                <mah:NumericUpDown Margin="5,0,0,0" Width="100" 
+                                                   x:Name="XSensePresc" 
+                                                   TrackMouseWheelWhenMouseOver="True" 
+                                                   Maximum="100" 
+                                                   Minimum="0" 
+                                                   NumericInputMode="Numbers" 
+                                                   Speedup="True"
+                                                   IsEnabled="{Binding SettingsEnabled}" />
                             </WrapPanel>
                         </GroupBox>
                         <GroupBox Header="Y sensitivity">
                             <WrapPanel x:Name="ySenseGrp" Margin="5">
-                                <Slider Maximum="100" Width="100" x:Name="YSense" />
-                                <TextBox Margin="5,0,0,0" Width="50" x:Name="YSensePresc" />
+                                <Slider Maximum="100" Width="100" x:Name="YSense" ValueChanged="YSense_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" IsEnabled="{Binding SettingsEnabled}" />
+                                <mah:NumericUpDown Margin="5,0,0,0" Width="100" 
+                                                   x:Name="YSensePresc" 
+                                                   TrackMouseWheelWhenMouseOver="True" 
+                                                   Maximum="100" Minimum="0" 
+                                                   NumericInputMode="Numbers" 
+                                                   Speedup="True"
+                                                   IsEnabled="{Binding SettingsEnabled}" />
                             </WrapPanel>
                         </GroupBox>
                     </WrapPanel>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Log">
+                <StackPanel>
+                    <TextBox x:Name="LogBox" 
+                         TextWrapping="Wrap" 
+                         xml:space="preserve"
+                         VerticalScrollBarVisibility="Visible"
+                         ScrollViewer.CanContentScroll="True"
+                         IsReadOnly="True"
+                         Width="400" />
+                </StackPanel>
+            </TabItem>
         </TabControl>
         <ToggleButton x:Name="start_btn" Content="Start" Click="ToggleButton_Click" IsChecked="{Binding ShouldRun}" Margin="5" Width="75" Height="75"
-                      Style="{DynamicResource MahApps.Styles.ToggleButton.Circle}"
-                       />
+                      Style="{DynamicResource MahApps.Styles.ToggleButton.Circle}" />
         <TextBlock HorizontalAlignment="Center"><Hyperlink FontSize="10" Click="Hyperlink_Click"><Run Text="Licenses and info" /></Hyperlink></TextBlock>
     </StackPanel>
 </mah:MetroWindow>
