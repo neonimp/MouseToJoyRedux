@@ -91,15 +91,10 @@ namespace MouseToJoystick2
             new OSSInfoWindow().Show();
         }
 
-        private void XSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.XSensePresc.Value = XSense.Value;
-        }
-
-        private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.YSensePresc.Value = YSense.Value;
-        }
+        private void XSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => XSensePresc.Value = XSense.Value;
+        private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => YSensePresc.Value = YSense.Value;
+        private void XSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => XSense.Value = XSensePresc.Value == null ? 0 : (double)XSensePresc.Value;
+        private void YSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => YSense.Value = YSensePresc.Value == null ? 0 : (double)YSensePresc.Value;
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

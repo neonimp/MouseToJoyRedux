@@ -61,7 +61,7 @@
                                                    Minimum="0" 
                                                    NumericInputMode="Numbers" 
                                                    Speedup="True"
-                                                   IsEnabled="{Binding SettingsEnabled}" />
+                                                   IsEnabled="{Binding SettingsEnabled}" ValueChanged="XSensePresc_ValueChanged" />
                             </WrapPanel>
                         </GroupBox>
                         <GroupBox Header="Y sensitivity">
@@ -73,7 +73,7 @@
                                                    Maximum="100" Minimum="0" 
                                                    NumericInputMode="Numbers" 
                                                    Speedup="True"
-                                                   IsEnabled="{Binding SettingsEnabled}" />
+                                                   IsEnabled="{Binding SettingsEnabled}" ValueChanged="YSensePresc_ValueChanged" />
                             </WrapPanel>
                         </GroupBox>
                     </WrapPanel>
