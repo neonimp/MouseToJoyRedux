@@ -98,7 +98,7 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <ToggleButton x:Name="start_btn" Content="Start" Click="ToggleButton_Click" IsChecked="{Binding ShouldRun}" Margin="5" Width="75" Height="75"
+        <ToggleButton x:Name="StartBtn" Content="Start" Click="ToggleButton_Click" IsChecked="{Binding ShouldRun}" Margin="5" Width="75" Height="75"
                       Style="{DynamicResource MahApps.Styles.ToggleButton.Circle}" />
         <TextBlock HorizontalAlignment="Center"><Hyperlink FontSize="10" Click="Hyperlink_Click"><Run Text="Licenses and info" /></Hyperlink></TextBlock>
     </StackPanel>
