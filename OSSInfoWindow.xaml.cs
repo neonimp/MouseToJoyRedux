@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Windows;
 
-namespace MouseToJoystick2
+namespace MouseToJoyRedux
 {
     /// <summary>
     /// Interaction logic for OSSInfoWindow.xaml
@@ -18,7 +18,7 @@ namespace MouseToJoystick2
             }
             catch (WebException)
             {
-                var response = MouseToJoystick2.Properties.Resources.Licenses;
+                var response = MouseToJoyRedux.Properties.Resources.Licenses;
                 License.Text = response;
             }
         }

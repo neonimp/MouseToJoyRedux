@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MouseToJoystick2.Properties {
+namespace MouseToJoyRedux.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

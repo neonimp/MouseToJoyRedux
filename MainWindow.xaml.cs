@@ -6,12 +6,12 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
 
-namespace MouseToJoystick2
+namespace MouseToJoyRedux
 {
     public partial class MainWindow : MetroWindow
     {
-        private MouseToJoystickHandler handler = null;
-        private readonly uint[] availableJoys;
+        private MouseToJoystickHandler _handler = null;
+        private readonly uint[] _availableJoys;
 
         public MainWindow()
         {
@@ -20,7 +20,7 @@ namespace MouseToJoystick2
             var model = (MainWindowModel)this.DataContext;
             ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
             ThemeManager.Current.SyncTheme();
-            DispatcherTimer dt = new DispatcherTimer();
+            var dt = new DispatcherTimer();
             dt.Tick += Keep_themeSync;
             dt.Interval = new TimeSpan(0, 0, 1);
             dt.Start();
@@ -30,15 +30,15 @@ namespace MouseToJoystick2
             model.ScreenHeight = bounds.Height.ToString();
             PrintMessage($"Width(detected): {model.ScreenWidth}, Height(detected): {model.ScreenHeight}");
 
-            availableJoys = MouseToJoystickHandler.GetActiveJoys();
-            foreach (var joy in availableJoys)
+            _availableJoys = MouseToJoystickHandler.GetActiveJoys();
+            foreach (var joy in _availableJoys)
             {
                 PrintMessage($"Found device with id: {joy}");
                 vJoyDeviceInput.Items.Add(joy);
             }
         }
 
-        private void Keep_themeSync(object sender, EventArgs e) => ThemeManager.Current.SyncTheme();
+        private static void Keep_themeSync(object sender, EventArgs e) => ThemeManager.Current.SyncTheme();
         private void PrintMessage(string message) => LogBox.Text += message + "\n";
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
@@ -47,12 +47,12 @@ namespace MouseToJoystick2
 
             if (model.ShouldRun == true)
             {
-                uint deviceId = Convert.ToUInt32(model.DeviceId);
-                int manualWidth = Convert.ToInt32(model.ScreenWidth);
-                int manualHeight = Convert.ToInt32(model.ScreenHeight);
+                var deviceId = Convert.ToUInt32(model.DeviceId);
+                var manualWidth = Convert.ToInt32(model.ScreenWidth);
+                var manualHeight = Convert.ToInt32(model.ScreenHeight);
                 try
                 {
-                    M2JConfig cfg = new M2JConfig
+                    var cfg = new M2JConfig
                     {
                         VjoyDevId = deviceId,
                         InvertX = model.InvertX,
@@ -61,10 +61,13 @@ namespace MouseToJoystick2
                         AutoSize = model.AutoScreenSize,
                         ManualWidth = manualWidth,
                         ManualHeight = manualHeight,
-                        LeftJoy = model.LeftJoy
+                        LeftJoy = model.LeftJoy,
+                        SenseX = (double)XSensePresc.Value,
+                        SenseY = (double)YSensePresc.Value
                     };
-                    handler = new MouseToJoystickHandler(cfg);
-                    PrintMessage($"Aquiring device with properties: {cfg}");
+                    _handler = new MouseToJoystickHandler(cfg);
+                    PrintMessage("---------------------------------------");
+                    PrintMessage($"Acquiring device with properties: {cfg}");
                     model.SettingsEnabled = false;
                 }
                 catch (Exception err)
@@ -78,10 +81,10 @@ namespace MouseToJoystick2
             }
             else
             {
-                if (this.handler != null)
+                if (this._handler != null)
                 {
-                    this.handler.Dispose();
-                    this.handler = null;
+                    this._handler.Dispose();
+                    this._handler = null;
                 }
                 model.SettingsEnabled = true;
             }
@@ -92,8 +95,8 @@ namespace MouseToJoystick2
         private void Hyperlink_Click(object sender, RoutedEventArgs e) => new OSSInfoWindow().Show();
         private void XSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => XSensePresc.Value = XSense.Value;
         private void YSense_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) => YSensePresc.Value = YSense.Value;
-        private void XSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => XSense.Value = XSensePresc.Value == null ? 0 : (double)XSensePresc.Value;
-        private void YSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => YSense.Value = YSensePresc.Value == null ? 0 : (double)YSensePresc.Value;
+        private void XSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => XSense.Value = XSensePresc.Value ?? 0;
+        private void YSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => YSense.Value = YSensePresc.Value ?? 0;
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

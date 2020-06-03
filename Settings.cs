@@ -1,4 +1,4 @@
-﻿namespace MouseToJoystick2.Properties
+﻿namespace MouseToJoyRedux.Properties
 {
 
 

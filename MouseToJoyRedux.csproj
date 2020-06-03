@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5B00B256-FD7B-45BA-A601-971117292B40}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MouseToJoystick2</RootNamespace>
+    <RootNamespace>MouseToJoyRedux</RootNamespace>
     <AssemblyName>m2jredux</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
