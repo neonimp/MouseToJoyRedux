@@ -19,36 +19,26 @@
                 <StackPanel Margin="5" IsEnabled="{Binding SettingsEnabled}">
                     <Grid VerticalAlignment="Center" Margin="0,0,0,10">
                         <Label Content="vJoy Device:" HorizontalAlignment="Left" VerticalAlignment="Center" Height="26" FontSize="12" />
-                        <ComboBox x:Name="vJoyDeviceInput" 
+                        <ComboBox x:Name="vJoyDeviceInput"
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Center"
                                   Width="80"
                                   Height="10"
-                                  Margin="74,4,0,0"/>
+                                  Margin="74,4,0,0"
+                                  SelectedIndex="{Binding DeviceIdIndex}"/>
                     </Grid>
                     <Grid Margin="2">
-                        <RadioButton Content="Left" x:Name="leftJoy" IsChecked="{Binding LeftJoy}" HorizontalAlignment="Left" />
-                        <RadioButton Content="Right" x:Name="rightJoy" IsChecked="{Binding RightJoy}" HorizontalAlignment="Center" />
+                        <RadioButton Content="Left" IsChecked="{Binding LeftJoy}" HorizontalAlignment="Left" />
+                        <RadioButton Content="Right" HorizontalAlignment="Center" />
                     </Grid>
                     <StackPanel>
-                        <mah:ToggleSwitch Margin="2" x:Name="useScrollWheel" Content="Scroll" IsOn="{Binding UseScroll}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="invertXCheckbox" Content="Invert X" IsOn="{Binding InvertX}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="invertYCheckbox" Content="Invert Y" IsOn="{Binding InvertY}" />
-                        <mah:ToggleSwitch Margin="2" x:Name="autoCenter" Content="Auto-Center" IsOn="{Binding AutoCenter}" />
+                        <mah:ToggleSwitch Margin="2" Content="Scroll" IsOn="{Binding UseScroll}" />
+                        <mah:ToggleSwitch Margin="2" Content="Invert X" IsOn="{Binding InvertX}" />
+                        <mah:ToggleSwitch Margin="2" Content="Invert Y" IsOn="{Binding InvertY}" />
+                        <mah:ToggleSwitch Margin="2" Content="Auto-Center" IsOn="{Binding AutoCenter}" />
                     </StackPanel>
                     <WrapPanel>
-                        <Label Content="Screen Size: " />
-                        <RadioButton Content="Automatic"
-                                     HorizontalContentAlignment="Stretch"
-                                     VerticalContentAlignment="Center"
-                                     Margin="0,0,5,0"
-                                     IsChecked="{Binding AutoScreenSize}"
-                                     GroupName="ScreenSize" />
-                        <RadioButton Content="Custom" VerticalContentAlignment="Center" GroupName="ScreenSize" IsChecked="{Binding ManualScreenSize}" />
-                        <Label Content="W:" />
-                        <TextBox Width="32" Height="20" IsEnabled="{Binding ManualScreenSize}" Text="{Binding ScreenWidth}" />
-                        <Label Content="H:" />
-                        <TextBox Width="32" Height="20" IsEnabled="{Binding ManualScreenSize}" Text="{Binding ScreenHeight}" />
+                        <Label x:Name="ScreenResLbl" Content="Screen Size: " />
                     </WrapPanel>
                 </StackPanel>
             </TabItem>
@@ -104,6 +94,7 @@
                          ScrollViewer.CanContentScroll="True"
                          IsReadOnly="True"
                          Width="400" Height="300" />
+                    <Button Name="SaveToFile" Click="SaveToFile_OnClick" Content="Save log to file"></Button>
                 </StackPanel>
             </TabItem>
         </TabControl>

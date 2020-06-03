@@ -1,23 +1,31 @@
-﻿using ControlzEx.Theming;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using System;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using ControlzEx.Theming;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace MouseToJoyRedux
 {
     public partial class MainWindow : MetroWindow
     {
-        private MouseToJoystickHandler _handler = null;
+        private MouseToJoystickHandler _handler;
         private readonly uint[] _availableJoys;
+        private readonly Guid _runId;
 
         public MainWindow()
         {
+            _runId = Guid.NewGuid();
             InitializeComponent();
-            PrintMessage($"Please send this log if you need help.\nVersion {typeof(MainWindow).Assembly.GetName().Version}");
-            var model = (MainWindowModel)this.DataContext;
+            PrintMessage("Please send this log if you need help.\n" +
+                         $"info: {typeof(MainWindow).Assembly.GetName().FullName}\n" +
+                         $"{typeof(MainWindow).Assembly.GetName().Name}@{typeof(MainWindow).Assembly.GetName().ProcessorArchitecture}\n" +
+                         $"{_runId:N}\n" +
+                         "No personally identifiable information is included in these logs.");
+            var model = (MainWindowModel)DataContext;
             ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncWithAppMode;
             ThemeManager.Current.SyncTheme();
             var dt = new DispatcherTimer();
@@ -26,14 +34,12 @@ namespace MouseToJoyRedux
             dt.Start();
 
             var bounds = Screen.PrimaryScreen.Bounds;
-            model.ScreenWidth = bounds.Width.ToString();
-            model.ScreenHeight = bounds.Height.ToString();
-            PrintMessage($"Width(detected): {model.ScreenWidth}, Height(detected): {model.ScreenHeight}");
-
+            PrintMessage($"Width(detected): {bounds.Width}, Height(detected): {bounds.Height}");
+            ScreenResLbl.Content = $"Width(detected): {bounds.Width}, Height(detected): {bounds.Height}";
             _availableJoys = MouseToJoystickHandler.GetActiveJoys();
             foreach (var joy in _availableJoys)
             {
-                PrintMessage($"Found device with id: {joy}");
+                PrintMessage($"Found device(s) with id: {joy}");
                 vJoyDeviceInput.Items.Add(joy);
             }
         }
@@ -43,13 +49,14 @@ namespace MouseToJoyRedux
 
         private void ToggleButton_Click(object sender, RoutedEventArgs e)
         {
-            var model = (MainWindowModel)this.DataContext;
+            var model = (MainWindowModel)DataContext;
 
             if (model.ShouldRun == true)
             {
-                var deviceId = Convert.ToUInt32(model.DeviceId);
-                var manualWidth = Convert.ToInt32(model.ScreenWidth);
-                var manualHeight = Convert.ToInt32(model.ScreenHeight);
+                var devIdAt = vJoyDeviceInput.Items[model.DeviceIdIndex];
+                var deviceId = Convert.ToUInt32(devIdAt);
+                var manualWidth = 0;
+                var manualHeight = 0;
                 try
                 {
                     var cfg = new M2JConfig
@@ -65,9 +72,9 @@ namespace MouseToJoyRedux
                         SenseX = (double)XSensePresc.Value,
                         SenseY = (double)YSensePresc.Value
                     };
-                    _handler = new MouseToJoystickHandler(cfg);
                     PrintMessage("---------------------------------------");
                     PrintMessage($"Acquiring device with properties: {cfg}");
+                    _handler = new MouseToJoystickHandler(cfg);
                     model.SettingsEnabled = false;
                 }
                 catch (Exception err)
@@ -76,20 +83,20 @@ namespace MouseToJoyRedux
                     PrintMessage($"{err}");
                     model.ShouldRun = false;
                     model.SettingsEnabled = true;
-                    this.start_btn.IsChecked = false;
+                    StartBtn.IsChecked = false;
                 }
             }
             else
             {
-                if (this._handler != null)
+                if (_handler != null)
                 {
-                    this._handler.Dispose();
-                    this._handler = null;
+                    _handler.Dispose();
+                    _handler = null;
                 }
                 model.SettingsEnabled = true;
             }
 
-            this.start_btn.Content = (bool)this.start_btn.IsChecked ? "Stop" : "Start";
+            StartBtn.Content = StartBtn.IsChecked != null && (bool)StartBtn.IsChecked ? "Stop" : "Start";
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e) => new OSSInfoWindow().Show();
@@ -98,9 +105,27 @@ namespace MouseToJoyRedux
         private void XSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => XSense.Value = XSensePresc.Value ?? 0;
         private void YSensePresc_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e) => YSense.Value = YSensePresc.Value ?? 0;
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
 
+        }
+
+        private void SaveToFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                OverwritePrompt = true,
+                DefaultExt = ".log",
+                SupportMultiDottedExtensions = true,
+                FileName = $"{DateTime.UtcNow:yy-MM-dd}-{_runId.ToString().Substring(0, 8)}",
+                AddExtension = true,
+                Filter = @"log | *.log"
+            };
+            if (saveDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            using (var fd = File.CreateText(saveDialog.FileName))
+            {
+                fd.Write(LogBox.Text);
+            }
         }
     }
 }

@@ -3,21 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using vJoyInterfaceWrap;
+using DirectInputWrapper;
 
 namespace MouseToJoyRedux
 {
     public struct M2JConfig
     {
-        public uint VjoyDevId { get; set; }
-        public bool InvertX { get; set; }
-        public bool InvertY { get; set; }
-        public bool AutoCenter { get; set; }
-        public bool AutoSize { get; set; }
-        public int ManualWidth { get; set; }
-        public int ManualHeight { get; set; }
-        public double SenseX { get; set; }
-        public double SenseY { get; set; }
-        public bool LeftJoy { get; set; }
+        internal uint VjoyDevId { get; set; }
+        internal bool InvertX { get; set; }
+        internal bool InvertY { get; set; }
+        internal bool AutoCenter { get; set; }
+        internal bool AutoSize { get; set; }
+        internal int ManualWidth { get; set; }
+        internal int ManualHeight { get; set; }
+        internal double SenseX { get; set; }
+        internal double SenseY { get; set; }
+        internal bool LeftJoy { get; set; }
 
         public M2JConfig(uint vjoyDevId, bool invertX, bool invertY, bool autoCenter, bool autoSize, int manualWidth, int manualHeight, double senseX, double senseY, bool leftJoy = true)
         {
@@ -43,11 +44,16 @@ namespace MouseToJoyRedux
                 $"ManualWidth: {ManualWidth}\n" +
                 $"ManualHeight: {ManualHeight}\n" +
                 $"sense(X,Y): {SenseX},{SenseY}\n" +
-                $"LeftJoy: {LeftJoy}";
+                "Joy: " + (LeftJoy ? "left" : "right");
         }
     }
 
-    internal class MouseToJoystickHandler : IDisposable
+    public struct KeyBindings
+    {
+        internal DirectKeyCombo DirectCombo { get; set; }
+    }
+
+    internal sealed class MouseToJoystickHandler : IDisposable
     {
         #region class_vars_declr
 
@@ -230,15 +236,6 @@ namespace MouseToJoyRedux
             this._joystick.SetBtn(false, this._id, btnId);
         }
 
-        private void HandleMouseMoveFirst(object sender, MouseEventArgs e)
-        {
-            this._lastX = e.X;
-            this._lastY = e.Y;
-
-            _eventHooker.MouseMove -= HandleMouseMoveFirst;
-            _eventHooker.MouseMove += HandleMouseMove;
-        }
-
         private void HandleMouseMove(object sender, MouseEventArgs e)
         {
             var bounds = Screen.PrimaryScreen.Bounds;
@@ -290,30 +287,28 @@ namespace MouseToJoyRedux
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        private bool _disposedValue = false; // To detect redundant calls
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (_disposedValue) return;
+            if (disposing)
             {
-                if (disposing)
+                if (this._eventHooker != null)
                 {
-                    if (this._eventHooker != null)
-                    {
-                        this._eventHooker.Dispose();
-                        this._eventHooker = null;
-                    }
-
-                    // dispose managed state (managed objects).
-                    if (this._joystick != null)
-                    {
-                        this._joystick.RelinquishVJD(this._id);
-                        this._joystick = null;
-                    }
+                    this._eventHooker.Dispose();
+                    this._eventHooker = null;
                 }
 
-                disposedValue = true;
+                // dispose managed state (managed objects).
+                if (this._joystick != null)
+                {
+                    this._joystick.RelinquishVJD(this._id);
+                    this._joystick = null;
+                }
             }
+
+            _disposedValue = true;
         }
 
         // This code added to correctly implement the disposable pattern.
